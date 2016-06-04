@@ -1,0 +1,21 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "editor.tabSize": 2,
+  "standard.enable": true,
+  "standard.options": {
+    "globals": [
+      "describe",
+      "it",
+      "expect",
+      "after",
+      "afterAll",
+      "afterEach",
+      "before",
+      "beforeAll",
+      "beforeEach",
+      "jasmine"
+    ]
+  },
+  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
+  "typescript.tsdk": "C:\\Users\\Jay\\AppData\\Roaming\\npm\\node_modules\\typescript\\lib"
+}

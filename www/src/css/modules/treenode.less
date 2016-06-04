@@ -1,0 +1,51 @@
+
+// <treenode>
+.js--treeview__treenode {
+  display: inherit;
+	width: 100%;
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: #E5F3FB;
+    border-color: #70C0E7;
+  }
+
+  &--selected {
+    background-color: #F7F7F7;
+	  border-color: #DEDEDE;
+    font-style: italic;
+
+    &:hover {
+      background-color: #CBE8F6;
+	    border-color: #26A0DA;
+    }
+  }
+}
+// </treenode>
+
+// <treenode-title>
+.js--treeview__treenode-title {
+  display: inline-block;
+	padding-left: 3px;
+	padding-right: 3px;
+	color: black;
+	vertical-align: top;
+	margin: 0px;
+	margin-left: 3px;
+	cursor: pointer;
+}
+// </treenode-title>
+
+// <treenode-filter>
+.js--treeview__filtered-treenode {
+  &--no-match > .js--treeview__treenode-title {
+    color: silver;
+    font-weight: lighter;
+  }
+
+  &--match > .js--treeview__treenode-title {
+    color: black;
+    font-weight: bold;
+  }
+}
+// </treenode-filter>

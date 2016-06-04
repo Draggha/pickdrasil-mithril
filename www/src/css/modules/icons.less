@@ -1,0 +1,38 @@
+// <icons>
+.js--treeview__treenode-icon {
+	margin-left: 3px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: url("@{images}icons.svg") no-repeat;
+  background-size: cover;
+
+  &--file {
+    background-position: 50% 0;
+  }
+
+  &--folder {
+    background-position: 50% @IconSpriteBackgroundPositionY * 1;
+  }
+
+  &--folder-open {
+    background-position: 50% @IconSpriteBackgroundPositionY * 2;
+  }
+
+  &--node-collapsed {
+    background-position: 50% @IconSpriteBackgroundPositionY * 3;
+  }
+
+  &--node-expanded {
+    background-position: 50% @IconSpriteBackgroundPositionY * 4;
+  }
+
+  &--search {
+    background-position: 50% @IconSpriteBackgroundPositionY * 5;
+  }
+
+  &--save {
+    background-position: 50% @IconSpriteBackgroundPositionY * 6;
+  }
+}
+// </icons>

@@ -1,0 +1,7 @@
+node_modules/*
+build/config/jsdoctemplate/*
+src/coverage/*
+src/js/vendor/*
+src/tests/unit/jasmine/*
+tmp/*
+www/*

@@ -1,0 +1,38 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>TreeView component</title>
+    <link rel="stylesheet" href="treeview.css">
+</head>
+
+<body>
+    <div id="app"></div>
+    <!--div id="tests"></div-->
+    <script src="jspm_packages/system.js"></script>
+    <script src="jspm.browser.js"></script>
+    <script src="jspm.config.js"></script>
+    <script>
+        Promise.all([SystemJS.import('tape'), SystemJS.import('tape-dom'), SystemJS.import('test/tests.ts')]).then(function ([tape, tape_dom, tests]) {
+            tape_dom.installCSS()
+            tape_dom.stream(tape)
+            tests.default(tape)
+        })
+    </script>
+    <style>
+        #tests > .test {
+            border: 3px solid #eef;
+        }
+        
+        span.name {
+            max-width: inherit;
+            white-space: normal;
+        }
+        
+        p.name {
+            text-align: center;
+        }
+    </style>
+</body>
+
+</html>

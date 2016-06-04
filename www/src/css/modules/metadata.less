@@ -1,0 +1,22 @@
+// <metadata>
+.js--treeview__meta-data {
+  display: inline;
+  margin-left: 5px;
+}
+
+.js--treeview__meta-data-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("@{images}icons.svg") no-repeat;
+  background-size: cover;
+
+  &--status-on {
+    background-position: 50% @IconSpriteBackgroundPositionY * 7;
+  }
+
+  &--status-off {
+    background-position: 50% @IconSpriteBackgroundPositionY * 8;
+  }
+}
+// </metadata>

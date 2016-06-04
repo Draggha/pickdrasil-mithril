@@ -1,0 +1,116 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>tree view example #3</title>
+    <link rel="stylesheet" href="../dist/treeview.css">
+</head>
+
+<body>
+    <script src="../dist/radio.js"></script>
+    <script src="../dist/mithril.js"></script>
+    <script src="../dist/treeview.js"></script>
+
+    <h1>Example tree view component #3</h1>
+
+    <p>
+        Using multiple tree views on the same page should work.
+    </p>
+
+    <br/>
+
+    <!-- the to be developed tree view -->
+    <div id="js-treeview2-container" class="js--treeview__container"></div>
+    <div id="js-treeview-container" class="js--treeview__container"></div>
+
+    <textarea id="js-upper-treeview-datastore" style="display:none">
+      {
+          "id": "frameworks01",
+          "title": "Frameworks",
+          "isLeaf": false,
+          "children": [
+              {
+                  "id": "frameworks01-ampersand",
+                  "title": "Ampersand",
+                  "isLeaf": true,
+                  "children": []
+              }
+          ]
+      }
+  </textarea>
+    <textarea id="js-lower-treeview-datastore" style="display:none">
+      {
+          "id": "frameworks01",
+          "title": "Frameworks",
+          "isLeaf": false,
+          "children": [
+              {
+                  "id": "frameworks02-mithril",
+                  "title": "Mithril",
+                  "isLeaf": true,
+                  "children": [],
+                  "metaData": [
+                      {
+                          "type": "status",
+                          "value": true,
+                          "tooltip": "In use right now"
+                      }
+                  ]
+              },
+              {
+                  "id": "frameworks01-react",
+                  "title": "React",
+                  "isLeaf": true,
+                  "children": []
+              },
+              {
+                  "id": "frameworks01-cycle",
+                  "title": "Cycle",
+                  "isLeaf": true,
+                  "children": []
+              }
+          ]
+      }
+  </textarea>
+
+    <script type="text/javascript">
+        (function (window, m, createPickdrasil) {
+        var datastoreUpperTree = document.getElementById('js-upper-treeview-datastore');
+        var datastoreLowerTree = document.getElementById('js-lower-treeview-datastore');
+
+        // upper TreeView instance
+        var treeView2 = createPickdrasil({
+          data: [JSON.parse(datastoreUpperTree.innerHTML)],
+          events: {
+            onNodeClick: function onNodeClick(event) {
+              var node = this;
+
+              if (!node.selected()) {
+                  console.log("[Upper TreeView] Node \"" + node.title() + "\" was selected.");
+              }
+            }
+          }
+        });
+
+        // lower TreeView instance
+        var treeView = createPickdrasil({
+          data: [JSON.parse(datastoreLowerTree.innerHTML)],
+          events: {
+            onNodeClick: function onNodeClick(event) {
+              var node = this;
+
+              if (node.selected()) {
+                  console.log("[Lower TreeView] Node \"" + node.title() + "\" was selected.");
+              }
+            }
+          }
+        })
+
+        // bootstrap the module
+        m.mount(document.getElementById('js-treeview2-container'), treeView2)
+        m.mount(document.getElementById('js-treeview-container'), treeView)
+    })(this, this.m, this.createPickdrasil["default"] || function(){}); // this === window
+    </script>
+</body>
+
+</html>

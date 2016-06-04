@@ -1,0 +1,127 @@
+/* =================================================
+ *                  Modules
+ *  (feel free to make your changes here and there)
+ * *************************************************
+ */
+.js--treeview__treenode--hidden {
+  display: none;
+}
+.js--treeview__container {
+  font-family: tahoma, arial, helvetica;
+  font-size: 10pt;
+  white-space: nowrap;
+  padding: 3px;
+  margin: 0;
+  background-color: white;
+  border: 1px dotted gray;
+  overflow: visible;
+  min-height: 0%;
+  position: relative;
+}
+.js--treeview__container ul {
+  padding: 0 0 0 16px;
+  margin: 0;
+}
+.js--treeview__container li {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  -moz-background-clip: border;
+  -moz-background-inline-policy: continuous;
+  -moz-background-origin: padding;
+  background-attachment: scroll;
+  background-color: transparent;
+  background-position: 0px 0px;
+  background-repeat: repeat-y;
+  background-image: none;
+  margin: 0;
+  padding: 1px 0 0 0;
+}
+.js--treeview__treenode {
+  display: inherit;
+  width: 100%;
+  border: 1px solid transparent;
+}
+.js--treeview__treenode:hover {
+  background-color: #E5F3FB;
+  border-color: #70C0E7;
+}
+.js--treeview__treenode--selected {
+  background-color: #F7F7F7;
+  border-color: #DEDEDE;
+  font-style: italic;
+}
+.js--treeview__treenode--selected:hover {
+  background-color: #CBE8F6;
+  border-color: #26A0DA;
+}
+.js--treeview__treenode-title {
+  display: inline-block;
+  padding-left: 3px;
+  padding-right: 3px;
+  color: black;
+  vertical-align: top;
+  margin: 0px;
+  margin-left: 3px;
+  cursor: pointer;
+}
+.js--treeview__filtered-treenode--no-match > .js--treeview__treenode-title {
+  color: silver;
+  font-weight: lighter;
+}
+.js--treeview__filtered-treenode--match > .js--treeview__treenode-title {
+  color: black;
+  font-weight: bold;
+}
+.js--treeview__search-label {
+  display: block;
+  width: 100%;
+  padding: 3px;
+  background-color: lightgrey;
+}
+.js--treeview__meta-data {
+  display: inline;
+  margin-left: 5px;
+}
+.js--treeview__meta-data-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("img/icons.svg") no-repeat;
+  background-size: cover;
+}
+.js--treeview__meta-data-icon--status-on {
+  background-position: 50% 87.5%;
+}
+.js--treeview__meta-data-icon--status-off {
+  background-position: 50% 100%;
+}
+.js--treeview__treenode-icon {
+  margin-left: 3px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: url("img/icons.svg") no-repeat;
+  background-size: cover;
+}
+.js--treeview__treenode-icon--file {
+  background-position: 50% 0;
+}
+.js--treeview__treenode-icon--folder {
+  background-position: 50% 12.5%;
+}
+.js--treeview__treenode-icon--folder-open {
+  background-position: 50% 25%;
+}
+.js--treeview__treenode-icon--node-collapsed {
+  background-position: 50% 37.5%;
+}
+.js--treeview__treenode-icon--node-expanded {
+  background-position: 50% 50%;
+}
+.js--treeview__treenode-icon--search {
+  background-position: 50% 62.5%;
+}
+.js--treeview__treenode-icon--save {
+  background-position: 50% 75%;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>tree view example #2</title>
+    <link rel="stylesheet" href="../dist/treeview.css">
+</head>
+
+<body>
+    <script src="../dist/radio.js"></script>
+    <script src="../dist/mithril.js"></script>
+    <script src="../dist/treeview.js"></script>
+
+    <h1>Example tree view component #2</h1>
+
+    <p>
+        Tree nodes can take meta data to display icons with tooltips via HTML title attributes.
+    </p>
+
+    <br/>
+
+    <!-- the to be developed tree view -->
+    <div id="js-treeview-container" class="js--treeview__container"></div>
+
+    <textarea id="js-treeview-datastore" style="display:none">
+    {
+        "id": "frameworks01",
+        "title": "Frameworks",
+        "isLeaf": false,
+        "children": [
+            {
+                "id": "frameworks01-ampersand",
+                "title": "Ampersand",
+                "isLeaf": true,
+                "children": [],
+                "metaData": [
+                    {
+                        "type": "status",
+                        "value": false,
+                        "tooltip": "No virtual DOM used"
+                    }
+                ]
+            },
+            {
+                "id": "frameworks02-mithril",
+                "title": "Mithril",
+                "isLeaf": true,
+                "children": [],
+                "metaData": [
+                    {
+                        "type": "status",
+                        "value": true,
+                        "tooltip": "Uses a virtual DOM"
+                    }
+                ]
+            }
+        ]
+    }
+  </textarea>
+
+    <script type="text/javascript">
+        (function (window, m, createPickdrasil) {
+      var datastore = document.getElementById('js-treeview-datastore')
+
+      var treeView = createPickdrasil({
+        data: [JSON.parse(datastore.innerHTML)]
+      })
+
+      m.mount(document.getElementById('js-treeview-container'), treeView)
+    })(this, this.m, this.createPickdrasil["default"] || function(){}); // this === window
+    </script>
+</body>
+
+</html>

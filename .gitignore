@@ -1,0 +1,9 @@
+.report/
+node_modules/
+tmp/
+jsdoc/
+.idea/
+www/jspm_packages/
+coverage/
+selenium-debug.log
+npm-debug.log

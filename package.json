@@ -1,0 +1,194 @@
+{
+  "name": "mithril-treeview",
+  "version": "0.1.0",
+  "description": "A tree view component for the browser created with mithril.js.",
+  "private": true,
+  "main": "dist/treeview.js",
+  "files": [
+    "www/dist/**",
+    "www/examples/**"
+  ],
+  "scripts": {
+    "prestart": "npm-run-all --parallel watch:css",
+    "start": "parallelshell \"http-server www\" \"npm run watch:js\" \"rerun-script\"",
+    "build": "npm run lint && npm-run-all --parallel \"build:img -- www/dist/img/\" \"build:css -- www/dist/treeview.css --clean-css\" \"build:js\" \"build:js-libs\"",
+    "build:js": "jspm build src - mithril - radio www/dist/treeview.js --format umd --global-name createPickdrasil --global-deps \"{'mithril':'m'}\" --global-deps \"{'radio':'radio'}\" --skip-source-maps --minify",
+    "build:js-libs": "npm-run-all build:js-mithril build:js-radio",
+    "build:js-mithril": "jspm build mithril www/dist/mithril.js --format umd --global-name m --skip-source-maps --minify",
+    "build:js-radio": "jspm build radio www/dist/radio.js --format umd --global-name radio --skip-source-maps --minify",
+    "build:jsinterfaces": "tsc www/src/treeview/treeview.ts --declaration --outFile www/dist/treeview.js",
+    "build:css": "lessc www/src/css/app.less",
+    "build:img": "imagemin-newer www/src/img/",
+    "watch:js": "chokidar-socket-emitter",
+    "watch:css": "npm run build:css -- www/treeview.css",
+    "lint": "standard",
+    "postinstall": "jspm install"
+  },
+  "watches": {
+    "watch:css": "src/css/**"
+  },
+  "author": "Johann Haaf",
+  "license": "Dual License: Apache 2 License & MIT License",
+  "homepage": "https://github.com/Draggha",
+  "repository": "https://github.com/Draggha/pickdrasil-mithril",
+  "dependencies": {
+    "mithril": "^0.2.3",
+    "radio": "^0.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.7.2",
+    "babel-polyfill": "^6.7.2",
+    "babel-preset-es2015": "^6.6.0",
+    "chokidar-socket-emitter": "^0.5.0",
+    "http-server": "^0.9.0",
+    "imagemin-newer": "^1.0.1",
+    "jspm": "^0.17.0-beta.17",
+    "less": "^2.7.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "npm-run-all": "^1.6.0",
+    "parallelshell": "^2.0.0",
+    "rerun-script": "^0.6.0",
+    "standard": "^6.0.8",
+    "typescript": "^1.9.0-dev.20160604-1.0"
+  },
+  "standard": {
+    "env": [
+      "jasmine"
+    ],
+    "globals": [
+      "describe",
+      "it",
+      "afterAll",
+      "beforeAll",
+      "afterEach",
+      "beforeEach",
+      "expect",
+      "jasmine",
+      "spyOn"
+    ],
+    "ignore": [
+      "karma.conf.js",
+      "dist/**",
+      "node_modules/**",
+      "src/**",
+      "www/jspm_packages/**",
+      "www/jspm.browser.js",
+      "www/jspm.config.js"
+    ]
+  },
+  "ava": {
+    "files": [
+      "www/**/__tests__/*.js"
+    ]
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "www"
+    },
+    "dependencies": {
+      "babel-core": "npm:babel-core@^6.7.2",
+      "mithril": "npm:mithril@0.2.3",
+      "plugin-typescript": "github:frankwallis/plugin-typescript@4.0.8",
+      "radio": "npm:radio@0.2.0",
+      "ts": "github:frankwallis/plugin-typescript@4.0.8"
+    },
+    "devDependencies": {
+      "babel-runtime": "npm:babel-runtime@^6.6.1",
+      "events": "github:jspm/nodelibs-events@^0.2.0-alpha",
+      "http": "github:jspm/nodelibs-http@^0.2.0-alpha",
+      "nodelibs-events": "github:jspm/nodelibs-events@0.2.0-alpha",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.8",
+      "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.6.0",
+      "systemjs-plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
+      "tape": "npm:tape@^4.5.1",
+      "tape-dom": "npm:tape-dom@^0.0.10"
+    },
+    "buildConfig": {
+      "transpileES6": true,
+      "minify": true
+    },
+    "peerDependencies": {
+      "assert": "github:jspm/nodelibs-assert@^0.2.0-alpha",
+      "buffer": "github:jspm/nodelibs-buffer@^0.2.0-alpha",
+      "child_process": "github:jspm/nodelibs-child_process@^0.2.0-alpha",
+      "constants": "github:jspm/nodelibs-constants@^0.2.0-alpha",
+      "core-js": "npm:core-js@^2.2.1",
+      "crypto": "github:jspm/nodelibs-crypto@^0.2.0-alpha",
+      "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
+      "module": "github:jspm/nodelibs-module@^0.2.0-alpha",
+      "net": "github:jspm/nodelibs-net@^0.2.0-alpha",
+      "os": "github:jspm/nodelibs-os@^0.2.0-alpha",
+      "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
+      "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
+      "readable-stream": "npm:readable-stream@^2",
+      "readline": "github:jspm/nodelibs-readline@^0.2.0-alpha",
+      "stream": "github:jspm/nodelibs-stream@^0.2.0-alpha",
+      "string_decoder": "github:jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "tty": "github:jspm/nodelibs-tty@^0.2.0-alpha",
+      "url": "github:jspm/nodelibs-url@^0.2.0-alpha",
+      "util": "github:jspm/nodelibs-util@^0.2.0-alpha",
+      "vm": "github:jspm/nodelibs-vm@^0.2.0-alpha"
+    },
+    "overrides": {
+      "npm:babel-runtime@5.8.35": {
+        "main": false,
+        "dependencies": {},
+        "optionalDependencies": {
+          "core-js": "^1.2.0"
+        }
+      },
+      "npm:debug@2.2.0": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
+      "npm:esprima@2.7.2": {
+        "jspmNodeConversion": false
+      },
+      "npm:googlediff@0.1.0": {
+        "format": "global",
+        "main": "javascript/diff_match_patch_uncompressed.js",
+        "meta": {
+          "javascript/diff_match_patch_uncompressed.js": {
+            "exports": "diff_match_patch",
+            "format": "global"
+          }
+        }
+      },
+      "npm:inherits@2.0.1": {
+        "ignore": [
+          "test.js"
+        ]
+      },
+      "github:frankwallis/plugin-typescript@4.0.8": {
+        "dependencies": {
+          "typescript": "npm:typescript@1.9.0-dev.20160604-1.0"
+        }
+      },
+      "npm:ms@0.7.1": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
+      },
+      "npm:typescript@1.9.0-dev.20160604-1.0": {
+        "browser": {},
+        "map": {
+          "buffer": "@empty",
+          "child_process": "@empty",
+          "fs": "@empty",
+          "path": "@empty",
+          "process": "@empty",
+          "readline": "@empty"
+        }
+      }
+    }
+  }
+}

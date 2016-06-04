@@ -1,0 +1,123 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>tree view example #1</title>
+    <link rel="stylesheet" href="../dist/treeview.css">
+</head>
+
+<body>
+    <script src="../dist/radio.js"></script>
+    <script src="../dist/mithril.js"></script>
+    <script src="../dist/treeview.js"></script>
+
+    <h1>Example tree view component #1</h1>
+    <!-- the to be developed tree view -->
+    <div id="js-treeview-container" class="js--treeview__container"></div>
+
+    <textarea id="js-treeview-datastore" style="display:none">
+        {
+            "id": "frameworks01",
+            "title": "Frameworks",
+            "isLeaf": false,
+            "children": [
+                {
+                    "id": "frameworks01",
+                    "title": "Classic",
+                    "isLeaf": false,
+                    "children": [
+                        {
+                            "id": "frameworks01-ampersand",
+                            "title": "Ampersand",
+                            "isLeaf": true,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "frameworks02",
+                    "title": "Virtual-Dom",
+                    "isLeaf": false,
+                    "children": []
+                }
+            ]
+        }
+    </textarea>
+
+    <textarea id="js-treeview-datastore-children" style="display:none">
+        {
+            "id": "frameworks02",
+            "title": "Virtual-Dom",
+            "isLeaf": false,
+            "children": [
+                {
+                    "id": "frameworks02-mithril",
+                    "title": "Mithril",
+                    "isLeaf": true,
+                    "children": []
+                },
+                {
+                    "id": "frameworks02-react",
+                    "title": "React",
+                    "isLeaf": true,
+                    "children": []
+                },
+                {
+                    "id": "frameworks02-cycle",
+                    "title": "Cycle",
+                    "isLeaf": true,
+                    "children": []
+                }
+            ]
+        }
+    </textarea>
+
+    <script type="text/javascript">
+        (function (window, m, createPickdrasil) {
+            var datastore = document.getElementById('js-treeview-datastore')
+            var treeView
+
+            treeView = createPickdrasil({
+                data: [JSON.parse(datastore.innerHTML)],
+                events: {
+                    onExpanderClick: function onExpanderClick(event) {
+                        // this === NodeData object whose event got triggered
+                        var parentNode = this
+
+                        if (!parentNode.hasChildren()) {
+                            // attach an event handler to make sure that the tree gets updated as soon as the data arrives
+                            var datastoreChildData = JSON.parse(document.getElementById('js-treeview-datastore-children').innerHTML)
+
+                            if (datastoreChildData && parentNode.id() === datastoreChildData.id) {
+                                // save the error code
+                                parentNode.errorCode(datastoreChildData.errorCode || 0)
+
+                                // create a new tree node for every child in the datastore
+                                datastoreChildData.children.map(function (childData) {
+                                    parentNode.createChildNode(childData, function (error, newNode) {
+                                    if (error) {
+                                        console.log('ERROR in [createChildNode] ', error)
+                                    } else {
+                                        console.log("Child node created: ")
+                                        console.log(newNode.title())
+                                    }
+                                    });
+                                });
+                                parentNode.expanded(true);
+                                //parentNode.setEvent(treeView.Events.node.expander.on.click, void 0); // void 0 === undefined
+                            } else {
+                                console.log(datastoreChildData);
+                                console.log('No data given. Maybe you are missing rights?');
+                                parentNode.errorCode(404); // removes the expander icon
+                            }
+                        }
+                    }
+                }
+            })
+
+            m.mount(document.getElementById('js-treeview-container'), treeView)
+        })(this, this.m, this.createPickdrasil["default"] || function(){}); // this === window
+    </script>
+</body>
+
+</html>
