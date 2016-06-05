@@ -1,9 +1,6 @@
-.report/
 node_modules/
-tmp/
-jsdoc/
+jspm_packages/
+.vscode/
 .idea/
-www/jspm_packages/
-coverage/
-selenium-debug.log
 npm-debug.log
+www/treeview.css

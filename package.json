@@ -11,14 +11,14 @@
   "scripts": {
     "prestart": "npm-run-all --parallel watch:css",
     "start": "parallelshell \"http-server www\" \"npm run watch:js\" \"rerun-script\"",
-    "build": "npm run lint && npm-run-all --parallel \"build:img -- www/dist/img/\" \"build:css -- www/dist/treeview.css --clean-css\" \"build:js\" \"build:js-libs\"",
-    "build:js": "jspm build src - mithril - radio www/dist/treeview.js --format umd --global-name createPickdrasil --global-deps \"{'mithril':'m'}\" --global-deps \"{'radio':'radio'}\" --skip-source-maps --minify",
+    "build": "npm run lint && npm-run-all --parallel \"build:img -- dist/img/\" \"build:css -- dist/treeview.css --clean-css\" \"build:js\" \"build:js-libs\"",
+    "build:js": "jspm build src - mithril - radio dist/treeview.js --format umd --global-name createPickdrasil --global-deps \"{'mithril':'m'}\" --global-deps \"{'radio':'radio'}\" --skip-source-maps --minify",
     "build:js-libs": "npm-run-all build:js-mithril build:js-radio",
-    "build:js-mithril": "jspm build mithril www/dist/mithril.js --format umd --global-name m --skip-source-maps --minify",
-    "build:js-radio": "jspm build radio www/dist/radio.js --format umd --global-name radio --skip-source-maps --minify",
-    "build:jsinterfaces": "tsc www/src/treeview/treeview.ts --declaration --outFile www/dist/treeview.js",
-    "build:css": "lessc www/src/css/app.less",
-    "build:img": "imagemin-newer www/src/img/",
+    "build:js-mithril": "jspm build mithril dist/mithril.js --format umd --global-name m --skip-source-maps --minify",
+    "build:js-radio": "jspm build radio dist/radio.js --format umd --global-name radio --skip-source-maps --minify",
+    "build:jsinterfaces": "tsc www/src/treeview/treeview.ts --declaration --outFile dist/treeview.js",
+    "build:css": "lessc www/css/app.less",
+    "build:img": "imagemin-newer www/img/",
     "watch:js": "chokidar-socket-emitter",
     "watch:css": "npm run build:css -- www/treeview.css",
     "lint": "standard",
@@ -52,33 +52,12 @@
     "typescript": "^1.9.0-dev.20160604-1.0"
   },
   "standard": {
-    "env": [
-      "jasmine"
-    ],
-    "globals": [
-      "describe",
-      "it",
-      "afterAll",
-      "beforeAll",
-      "afterEach",
-      "beforeEach",
-      "expect",
-      "jasmine",
-      "spyOn"
-    ],
     "ignore": [
-      "karma.conf.js",
       "dist/**",
       "node_modules/**",
-      "src/**",
       "www/jspm_packages/**",
       "www/jspm.browser.js",
       "www/jspm.config.js"
-    ]
-  },
-  "ava": {
-    "files": [
-      "www/**/__tests__/*.js"
     ]
   },
   "jspm": {
@@ -94,7 +73,6 @@
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^6.6.1",
-      "events": "github:jspm/nodelibs-events@^0.2.0-alpha",
       "http": "github:jspm/nodelibs-http@^0.2.0-alpha",
       "nodelibs-events": "github:jspm/nodelibs-events@0.2.0-alpha",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.8",
@@ -114,6 +92,7 @@
       "constants": "github:jspm/nodelibs-constants@^0.2.0-alpha",
       "core-js": "npm:core-js@^2.2.1",
       "crypto": "github:jspm/nodelibs-crypto@^0.2.0-alpha",
+      "events": "github:jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
       "module": "github:jspm/nodelibs-module@^0.2.0-alpha",
       "net": "github:jspm/nodelibs-net@^0.2.0-alpha",
