@@ -2,7 +2,7 @@
 
 # What is this?
 
-This is a tree view component written for mithril.js and its name is pickdrasil-mithril.
+This is a tree view component written for mithril.js.
 
 # Usage information
 
@@ -15,13 +15,6 @@ Just look into the "examples" folder. The examples should be very understandable
 - dist/treeview.js
   - [mithril.js](http://mithriljs.com/)
   - [radio.js](http://radio.uxder.com/)
-
-## for Internet Explorer 9
-- console.js
-
-## for Internet Explorer 8
-- es5.js or core.js
-- json2.js
 
 # Development
 
