@@ -2,7 +2,6 @@ SystemJS.config({
   devConfig: {
     "map": {
       "babel-runtime": "npm:babel-runtime@6.6.1",
-      "events": "github:jspm/nodelibs-events@0.2.0-alpha",
       "http": "github:jspm/nodelibs-http@0.2.0-alpha",
       "plugin-babel": "npm:systemjs-plugin-babel@0.0.12",
       "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.6.0",
@@ -15,14 +14,6 @@ SystemJS.config({
         "map": {
           "foreach": "npm:foreach@2.0.5",
           "object-keys": "npm:object-keys@1.0.9"
-        }
-      },
-      "npm:es-abstract@1.5.0": {
-        "map": {
-          "es-to-primitive": "npm:es-to-primitive@1.1.1",
-          "function-bind": "npm:function-bind@1.1.0",
-          "is-callable": "npm:is-callable@1.1.3",
-          "is-regex": "npm:is-regex@1.0.3"
         }
       },
       "npm:es-to-primitive@1.1.1": {
@@ -70,7 +61,7 @@ SystemJS.config({
       "npm:string.prototype.trim@1.1.2": {
         "map": {
           "define-properties": "npm:define-properties@1.1.2",
-          "es-abstract": "npm:es-abstract@1.5.0",
+          "es-abstract": "npm:es-abstract@1.5.1",
           "function-bind": "npm:function-bind@1.1.0"
         }
       },
@@ -139,6 +130,14 @@ SystemJS.config({
           "weakee": "npm:weakee@1.0.0",
           "socket.io-client": "github:socketio/socket.io-client@1.4.6"
         }
+      },
+      "npm:es-abstract@1.5.1": {
+        "map": {
+          "function-bind": "npm:function-bind@1.1.0",
+          "es-to-primitive": "npm:es-to-primitive@1.1.1",
+          "is-regex": "npm:is-regex@1.0.3",
+          "is-callable": "npm:is-callable@1.1.3"
+        }
       }
     }
   },
@@ -190,6 +189,7 @@ SystemJS.config({
     "constants": "github:jspm/nodelibs-constants@0.2.0-alpha",
     "core-js": "npm:core-js@2.2.1",
     "crypto": "github:jspm/nodelibs-crypto@0.2.0-alpha",
+    "events": "github:jspm/nodelibs-events@0.2.0-alpha",
     "fs": "github:jspm/nodelibs-fs@0.2.0-alpha",
     "mithril": "npm:mithril@0.2.3",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
