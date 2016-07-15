@@ -15,7 +15,7 @@ import SearchBar from './treeview-searchbar/searchbar'
 /**
  * Bootstraps the TreeView with given data.
  * @example
- * var treeView = window.KRZTreeView({
+ * var treeView = window.createPickdrasil({
  *    data: [{
  *       "id": "id001", // The TreeNode's unique identifier.
  *       "title": "Documents", // The TreeNode's label.

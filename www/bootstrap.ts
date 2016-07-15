@@ -8,10 +8,10 @@ export function __reload (mod) {
 }
 
 import m from 'mithril'
-import createYggdrasil from 'mithril-treeview/app'
+import createPickdrasil from 'mithril-treeview/app'
 import simpleTreeData from './test/data/simple-tree'
 
-let tree = createYggdrasil({
+let tree = createPickdrasil({
   data: simpleTreeData
 })
 export let component = m.mount(document.getElementById('app'), tree)
