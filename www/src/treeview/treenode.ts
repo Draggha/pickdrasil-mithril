@@ -4,10 +4,10 @@
  */
 // interfaces
 import {
+  IMithrilVNode,
   INodeData,
   INodeMetaData,
-  IEventHandler,
-  IDOMEventHandler
+  IEventHandler
  } from './interfaces/common-interfaces'
 // external libs
 import m from 'mithril'
@@ -25,7 +25,27 @@ import {
 } from './constants/cssclasses'
 import { MetaDataTypes, PubSubTopics } from './constants/dictionary'
 import { hasClass, getTreeNodeWrapperClass, getTreeNodeClass, getTreeNodeExpanderIconClass, getTreeNodeIconClass } from './helper/cssclass'
+import MetaDataStatusIndicator from './components/MetaDataStatusIndicator'
 
+interface ITreeNodeVNode extends IMithrilVNode {
+  attrs: {
+    /**
+     * @type {INodeData} A Node data object which represents a tree node with all its possible functions.
+     */
+    nodeData: INodeData
+  },
+  /**
+   * @type {INodeData} A Node data object which represents a tree node with all its possible functions.
+   */
+  state: INodeData
+}
+
+interface ITreeNodeEvent extends ITreeNodeVNode {
+  /**
+   * @type {HTMLBaseElement} 
+   */
+  domElement: HTMLBaseElement
+}
 
 /**
  * Toggles the TreeNode's "selected" state.
@@ -46,13 +66,12 @@ export function onNodeClick(nodeData: INodeData) {
     nodeData.selected(!nodeData.selected())
     let nodeClicked = nodeData.events.onNodeClick
 
-    m.startComputation()
     if (nodeClicked) {
       // Bind the nodeClicked event's context to the current NodeData object
       // and fire it with the current click event data.
       (<IEventHandler>nodeClicked).call(nodeData, event)
+      m.redraw()
     }
-    m.endComputation()
   }
 }
 
@@ -68,115 +87,59 @@ export function onNodeClick(nodeData: INodeData) {
 export function onExpanderClick(nodeData: INodeData) {
   return (event: Event): void => {
     if (!nodeData.isLeaf()) {
-      let expanderClicked = nodeData.events.onExpanderClick
+      const expanderClicked = nodeData.events.onExpanderClick
+      const nodeDataHasChildren = nodeData.hasChildren()
 
-      m.startComputation()
-      if (nodeData.hasChildren()) {
+      if (nodeDataHasChildren) {
         nodeData.expanded(!nodeData.expanded())
       }
-
       if (expanderClicked) {
         // Bind the expanderClicked event's context to the current NodeData object
         // and fire it with the current click event data.
         (<IEventHandler>expanderClicked).call(nodeData, event)
         radio(PubSubTopics.TREE_STRUCTURE_CHANGED).broadcast()
       }
-      m.endComputation()
-    }
-  }
-}
-
-/**
- * Triggers after the component was either inserted into the DOM or updated in the DOM.
- * The context will be modified to contain a TreeNode controller (this => instanceof(TreeNode.controller)).
- *
- * @protected
- * @this {INodeData}
- * @param {HTMLBaseElement} element The component's DOM element.
- * @param {boolean} isInitialized Indicates if the DOM element was created (true) or updated (false).
- */
-export function onNodeCreatedOrUpdated(nodeData: INodeData) {
-  return (element: HTMLBaseElement, isInitialized: boolean /*, context*/): void => {
-    if (isInitialized) {
-      let nodeCreated = nodeData.events.onNodeCreate
-      // Bind the event's context to the current NodeData object
-      // and pass the DOM element into it.
-      if (nodeCreated) {
-        (<IDOMEventHandler>nodeCreated).call(nodeData, element)
-      }
-    } else {
-      let nodeUpdated = nodeData.events.onNodeUpdate
-      // Bind the event's context to the current NodeData object
-      // and pass the DOM element into it.
-      if (nodeUpdated) {
-        (<IDOMEventHandler>nodeUpdated).call(nodeData, element)
+      if (nodeDataHasChildren || expanderClicked) {
+        m.redraw()
       }
     }
   }
 }
 
 /**
- * @type {IMithrilComponent}
- */
-let TreeNode: any = {}
-
-interface ITreeNodeOptions { nodeData: INodeData }
-interface ITreeNodeController { nodeData: INodeData }
-/**
- * A TreeNode's controller.
+ * Triggers after the component was inserted into the DOM for the first time.
+ * The context of the user generated onNodeCreate function will be modified to contain a reference to the
+ * TreeNode's NodeData object.
  *
  * @protected
- * @memberOf module:TreeNode
- * @constructor
- * @param {{nodeData:INodeData}} args An object containing TreeNode data.
+ * @param {ITreeNodeEvent} vnode TreeNode virtual node
  */
-TreeNode.controller = function (args: ITreeNodeOptions): ITreeNodeController {
-  return {
-    nodeData: args.nodeData
+export function onNodeCreated(vnode: ITreeNodeEvent): void {
+  const { state: nodeData } = vnode
+  const { events: { onNodeCreate } } = nodeData
+
+  if (onNodeCreate) {
+    const { domElement } = vnode
+    onNodeCreate.call(nodeData, domElement)
   }
 }
 
 /**
- * The TreeNode's view.
+ * Triggers after the component was updated in the DOM.
+ * The context of the user generated onNodeUpdate function will be modified to contain a reference to the
+ * TreeNode's NodeData object.
  *
  * @protected
- * @param {ITreeNodeController} ctrl An instance of the TreeNode's controller.
- * @param {ITreeNodeOptions} args An object containing tree data.
- * @param {string|Object|Array} components An Array of TreeNode components.
- * @returns {Object} A VDOM object for mithril.
+ * @param {ITreeNodeEvent} vnode TreeNode virtual node
  */
-TreeNode.view = (ctrl: ITreeNodeController, args: ITreeNodeOptions, components: any): Object => {
-  let nodeData: INodeData = ctrl.nodeData
+export function onNodeUpdated(vnode: ITreeNodeEvent): void {
+  const { state: nodeData } = vnode
+  const { events: { onNodeUpdate } } = nodeData
 
-  return m('ul', (!nodeData.parent()) ? {
-    'class': CLASS_TREE_CONTAINER
-  } : {}, m('li', {
-    id: nodeData.id(),
-    'class': getTreeNodeWrapperClass(nodeData),
-    config: onNodeCreatedOrUpdated(nodeData)
-  }, [
-      m('span', {
-        'class': getTreeNodeClass(nodeData),
-        onclick: onNodeClick(nodeData)
-      }, [
-          m('span', {
-            'class': getTreeNodeExpanderIconClass(nodeData),
-            onclick: onExpanderClick(nodeData)
-          }),
-          m('span', {
-            'class': getTreeNodeIconClass(nodeData)
-          }),
-          m('span', {
-            'class': CLASS_TREENODE_TITLE
-          }, nodeData.title()),
-          (!nodeData.metaData || nodeData.metaData.length < 1) ? '' : nodeData.metaData.map((meta) => {
-            if (meta) {
-              return TreeNode.view.createMetaDataView(meta)
-            }
-          })
-        ]),
-      components
-    ]))
+  if (onNodeUpdate) {
+    const { domElement } = vnode
+    onNodeUpdate.call(nodeData, domElement)
+  }
 }
 
 /**
@@ -185,23 +148,11 @@ TreeNode.view = (ctrl: ITreeNodeController, args: ITreeNodeOptions, components: 
  * @param {INodeMetaData} meta A MetaData object.
  * @returns {Object} A VDOM snippet for mithril.
  */
-TreeNode.view.createMetaDataView = (meta: INodeMetaData): Object => {
-  let view
-
+const createMetaDataView = (meta: INodeMetaData): Object => {
   if (meta.type() === MetaDataTypes.STATUS) {
-    let viewOpts: { class: string, title?: string } = {
-      'class': CLASS_METADATA
-    }
-    if (meta.tooltip() && meta.tooltip() !== '') {
-      viewOpts.title = meta.tooltip()
-    }
-    view = m('span', viewOpts, [
-      m('em', {
-        'class': CLASS_METADATA_ICON + ' ' + ((!meta.value()) ? CLASS_METADATA_ICON_STATUS_OFF : CLASS_METADATA_ICON_STATUS_ON)
-      })
-    ])
+    return m(MetaDataStatusIndicator, meta)
   } else {
-    view = m("span", {
+    return m("span", {
       style: {
         border: "1px dotted lightgray",
         display: "inline",
@@ -214,8 +165,70 @@ TreeNode.view.createMetaDataView = (meta: INodeMetaData): Object => {
       title: meta.tooltip()
     }, [meta.value()])
   }
+}
 
-  return view
+/**
+ * @type {IMithrilComponent}
+ */
+let TreeNode = {
+  /**
+   * A TreeNode's controller.
+   *
+   * @protected
+   * @constructor
+   * @param {ITreeNodeVNode} vnode TreeNode virtual node
+   */
+  oninit: function oninit (vnode: ITreeNodeVNode): void {
+    vnode.state = vnode.attrs.nodeData
+  },
+  /**
+   * The TreeNode's view.
+   *
+   * @protected
+   * @param {ITreeNodeVNode} vnode TreeNode virtual node
+   * @returns {Object} A VDOM object for mithril.
+   */
+  view: function view (vnode): Object {
+    const { state: nodeData, children: components } = vnode
+
+    const treeNodeContainerOptions = (!nodeData.parent()) ? { 'class': CLASS_TREE_CONTAINER } : {}
+    const treeNodeItemWrapperOptions = {
+      id: nodeData.id(),
+      'class': getTreeNodeWrapperClass(nodeData),
+      oncreate: onNodeCreated,
+      onupdate: onNodeUpdated
+    }
+    const treeNodeItemOptions = {
+      'class': getTreeNodeClass(nodeData),
+      onclick: onNodeClick(nodeData)
+    }
+    const treeNodeExpanderIconOptions = {
+      'class': getTreeNodeExpanderIconClass(nodeData),
+      onclick: onExpanderClick(nodeData)
+    }
+    const treeNodeIconOptions = {
+      'class': getTreeNodeIconClass(nodeData)
+    }
+    const treeNodeTitleOptions = {
+      'class': CLASS_TREENODE_TITLE
+    }
+
+    return m('ul', treeNodeContainerOptions, [
+      m('li', treeNodeItemWrapperOptions, [
+        m('span', treeNodeItemOptions, [
+          m('span', treeNodeExpanderIconOptions),
+          m('span', treeNodeIconOptions),
+          m('span', treeNodeTitleOptions, nodeData.title()),
+          (!nodeData.metaData || nodeData.metaData.length < 1) ? '' : nodeData.metaData.map((meta) => {
+            if (meta) {
+              return createMetaDataView(meta)
+            }
+          })
+        ]),
+        components
+      ])
+    ])
+  }
 }
 
 export default TreeNode

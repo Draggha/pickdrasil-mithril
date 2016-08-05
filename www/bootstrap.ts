@@ -14,4 +14,4 @@ import simpleTreeData from './test/data/simple-tree'
 let tree = createPickdrasil({
   data: simpleTreeData
 })
-export let component = m.mount(document.getElementById('app'), tree)
+component = m.mount(document.getElementById('app'), tree)

@@ -1,6 +1,8 @@
 // external dependencies
 import m from 'mithril'
 import radio from 'radio' // PubSub library
+// interfaces
+import { IMithrilVNode, ITreeData } from '../treeview/interfaces/common-interfaces'
 // local
 import { PubSubTopics } from '../treeview/constants/dictionary'
 
@@ -9,6 +11,24 @@ import { PubSubTopics } from '../treeview/constants/dictionary'
  * @memberOf module:SearchBar
  */
 const CLASS_TREEVIEW_SEARCH_LABEL = 'js--treeview__search-label'
+
+/**
+ * SearchBar virtual node
+ */
+interface ISearchBarVNode extends IMithrilVNode {
+  attrs: {
+    /**
+     * @type {ITreeData} A reference to the TreeView's list of child node controllers.
+     */
+    treeData: ITreeData
+  },
+  state: {
+    /**
+     * @type {Function} An instance of a SearchBar controller.
+     */
+    searchTerm: Function
+  }
+}
 
 let willChange // undefined
 
@@ -73,15 +93,17 @@ let search = (treeViewInstance, value) => {
  * @memberOf module:SearchBar
  * @constructor
  * @alias SearchBar.controller
- * @param {TreeView.controller} treeViewInstance A reference to the TreeView's list of child node controllers.
+ * @param {ISearchBarVNode} vnode SearchBar virtual node
  */
-let SearchBarCtrl = function (treeViewInstance) {
+let SearchBarCtrl = function SearchBarCtrl (vnode: ISearchBarVNode) {
+  const treeViewInstance = vnode.attrs.treeData
+
   /**
    * A getter/setter for the search term.
    *
    * @instance
    */
-  this.searchTerm = (() => {
+  vnode.state.searchTerm = (() => {
     let _searchTerm = ''
     /**
      * A getter/setter for the search term.
@@ -109,10 +131,11 @@ let SearchBarCtrl = function (treeViewInstance) {
  * @protected
  * @memberOf module:SearchBar
  * @alias SearchBar.view
- * @param {SearchBarCtrl|SearchBar.controller} ctrl An instance of a SearchBar controller.
+ * @param {ISearchBarVNode} vnode SearchBar virtual node
  * @return {Object} A representation of a DOMElement as a POJO.
  */
-let SearchBarView = function (ctrl) {
+let SearchBarView = function SearchBarView (vnode: ISearchBarVNode) {
+  const state = vnode.state
   return m('Label', {
     'class': CLASS_TREEVIEW_SEARCH_LABEL
   }, [
@@ -120,8 +143,8 @@ let SearchBarView = function (ctrl) {
       m('input', {
         type: 'text',
         name: 'treeview-search',
-        oninput: m.withAttr('value', ctrl.searchTerm),
-        value: ctrl.searchTerm()
+        oninput: m.withAttr('value', state.searchTerm),
+        value: state.searchTerm()
       })
     ])
 }

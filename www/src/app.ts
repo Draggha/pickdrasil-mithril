@@ -54,8 +54,8 @@ import SearchBar from './treeview-searchbar/searchbar'
  * @returns {Object} A TreeView component for mithril.js.
  */
 export default function createTreeView(options: ITreeDataGlobalOptions): Object {
-  var components = {
+  const components = {
     header: [SearchBar]
   }
-  return m.component(TreeView, options, components)
+  return m(TreeView, {options, components})
 }

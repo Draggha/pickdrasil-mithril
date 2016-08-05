@@ -3,7 +3,7 @@
  * @module TreeView
  */
 // interfaces
-import { ITreeDataOptions, ITreeData, INodeData } from './interfaces/common-interfaces'
+import { IMithrilVNode, ITreeDataOptions, ITreeData, INodeData } from './interfaces/common-interfaces'
 // external libs
 import m from 'mithril'
 // components
@@ -13,61 +13,76 @@ import TreeData from './models/treedata'
 import { CLASS_TREE_HEADER } from './constants/cssclasses'
 
 /**
- * Generates and returns a ready to use tree view component for mithril.js.
+ * TreeView virtual node
  */
-let TreeView: any = {}
-
-/**
- * A TreeView component controller.
- *
- * @protected
- * @constructor
- * @param {ITreeNodeOptionsObject} args An options object.
- */
-TreeView.controller = function (args: ITreeDataOptions, components: { header?: Array<Object> }) {
-  return new TreeData(args)
-}
-
-/**
- * A mithril.js component view, which returns an array of Mithril.js components.
- *
- * @protected
- * @param {TreeView.controller} ctrl An instance of a TreeView controller.
- * @param {Object} args An options object.
- * @param {Object} components An object containing various components for different places in the TreeView.
- * @return {Object} An Object that represents a virtual DOM HTMLElement and its children for mithril.js.
- */
-TreeView.view = function (ctrl: ITreeData, args: ITreeDataOptions, components: { header?: Array<Object> }): Object {
-  return m('div', [
-    m('div', { 'class': CLASS_TREE_HEADER }, (!components || !components.header) ? [] : components.header.map((Component) => {
-      return m.component(Component, ctrl)
-    })),
-    (ctrl.getRootNodes().length > 0) ? TreeView.view.createTreeNodeView(ctrl) : ''
-  ])
+interface ITreeViewVNode extends IMithrilVNode {
+  attrs: {
+    /**
+     * @type {ITreeDataOptions} An options object
+     */
+    options: ITreeDataOptions,
+    /**
+     * @type {{ header?: Array<Object> }} An array containing various components for different places in the TreeView.
+     */
+    components: { header?: Array<Object> }
+  },
+  state: ITreeData
 }
 
 /**
  * Recursively walks through all tree nodes and instantiates a new tree node component for every NodeData object found within.
  *
  * @private
- * @param {ITreeData} treeData An Array of NodeData objects.
+ * @param {Array<INodeData>} treeRootNodes An Array of NodeData objects.
  * @returns {Object} An Object that represents a virtual DOM HTMLElement and its children for mithril.js.
  */
-TreeView.view.createTreeNodeView = (treeData: ITreeData): Object => {
-  let componentizeRecursively
-  componentizeRecursively = (treeNodes: Array<INodeData>) => {
-    return treeNodes.map((treeNode: INodeData) => {
+const createTreeNodeView = (treeRootNodes: Array<INodeData>): Object => {
+  const componentizeRecursively = (nodeDataList: Array<INodeData>) => {
+    return nodeDataList.map((nodeData: INodeData) => {
       let result
-      if (!treeNode.isLeaf() && treeNode.hasChildren()) {
-        result = m.component(TreeNode, { nodeData: treeNode }, componentizeRecursively(treeNode.children()))
+      if (!nodeData.isLeaf() && nodeData.hasChildren()) {
+        result = m(TreeNode, { nodeData }, componentizeRecursively(nodeData.children()))
       } else {
-        result = m.component(TreeNode, { nodeData: treeNode })
+        result = m(TreeNode, { nodeData })
       }
       return result
     })
   }
 
-  return componentizeRecursively(treeData.getRootNodes())
+  return componentizeRecursively(treeRootNodes)
+}
+
+/**
+ * Generates and returns a ready to use tree view component for mithril.js.
+ */
+let TreeView = {
+  /**
+   * A TreeView component controller.
+   *
+   * @protected
+   * @constructor
+   * @param {ITreeViewVNode} vnode TreeView virtual node
+   */
+  oninit: function oninit (vnode: ITreeViewVNode): void {
+    vnode.state = new TreeData(vnode.attrs.options)
+  },
+  /**
+   * A mithril.js component view, which returns an array of Mithril.js components.
+   *
+   * @protected
+   * @param {ITreeViewVNode} vnode TreeView virtual node
+   * @return {Object} An Object that represents a virtual DOM HTMLElement and its children for mithril.js.
+   */
+  view: function (vnode: ITreeViewVNode): Object {
+    const { state, attrs: { components }} = vnode
+    const treeRootNodes = state.getRootNodes()
+    return m('div', [
+      m('div', { 'class': CLASS_TREE_HEADER }, (!components || !components.header) ? [] : components.header.map((TreeHeaderComponent) => {
+        return m(TreeHeaderComponent, { treeData: state })
+      })),
+      (treeRootNodes.length > 0) ? createTreeNodeView(treeRootNodes) : ''
+    ])
+  }
 }
 
 export default TreeView

@@ -1,3 +1,18 @@
+export interface IMithrilVNode {
+  /**
+   * @type {Object} Arguments passed to the component instance
+   */
+  attrs: Object,
+  /**
+   * @type {Object} State properties saved on the component instance
+   */
+  state: Object,
+  /**
+   * @type {Array<Object>} An Array of child components.
+   */
+  children: Array<Object>
+}
+
 /**
  * A treeview event handler which contains meta data in its context.
  */
@@ -6,16 +21,6 @@ export interface IEventHandler {
    * @param {Event} event The Event object containing the context in which it was triggered.
    */
   (event: Event): void,
-}
-
-/**
- * A treeview DOM event handler which contains meta data in its context.
- */
-export interface IDOMEventHandler {
-  /**
-   * @param {HTMLElement} element The component's DOM element.
-   */
-  (element: HTMLElement): void,
 }
 
 /**
@@ -38,6 +43,16 @@ export interface IBooleanPropertyAccessor { (param?: boolean): boolean }
  * A property accessor which can store any given value and returns it on every call. If a new value is stored, that same given value will also be returned.
  */
 export interface IAnyPropertyAccessor { (param?: any): any }
+
+/**
+ * A treeview DOM event handler which contains meta data in its context.
+ */
+export interface IDOMEventHandler {
+  /**
+   * @param {HTMLElement} element The component's DOM element.
+   */
+  (element: HTMLElement): void,
+}
 
 /**
  * Contains all events that can be configured by outside input.
@@ -135,7 +150,7 @@ export interface ITreeDataOptions extends ITreeDataGlobalOptions {
   data: Array<INodeDataOptionsObject>
 }
 /**
- * The global API object returned by a instantiated tree view.
+ * The global API object returned by an instantiated tree view.
  */
 export interface ITreeData {
   treeData: () => Array<INodeData>

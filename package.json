@@ -32,7 +32,7 @@
   "homepage": "https://github.com/Draggha",
   "repository": "https://github.com/Draggha/pickdrasil-mithril",
   "dependencies": {
-    "mithril": "^0.2.3",
+    "mithril": "github:lhorie/mithril.js#rewrite",
     "radio": "^0.2.0"
   },
   "devDependencies": {
@@ -66,7 +66,7 @@
     },
     "dependencies": {
       "babel-core": "npm:babel-core@^6.7.2",
-      "mithril": "npm:mithril@0.2.3",
+      "mithril": "github:lhorie/mithril.js@rewrite",
       "plugin-typescript": "github:frankwallis/plugin-typescript@4.0.8",
       "radio": "npm:radio@0.2.0",
       "ts": "github:frankwallis/plugin-typescript@4.0.8"
